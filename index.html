@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EL-K Cookies · Home-made cookies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800;9..144,900&family=Fredoka:wght@400;500;600;700&family=Caveat:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pinkSoft:#F4C9CE;--pinkHot:#E0457B;--green:#1E6B4F;--greenDeep:#16523C;
+    --caramel:#C8893F;--caramelDeep:#A86E2C;--cream:#FFF8F0;--choc:#3A2A2E;
+    --serif:'Fraunces',Georgia,'Times New Roman',serif;
+    --script:'Caveat','Comic Sans MS',cursive;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--pinkSoft)}
+  body{
+    font-family:'Fredoka',system-ui,-apple-system,Segoe UI,sans-serif;color:var(--choc);cursor:auto;
+    background:
+      radial-gradient(120% 80% at 80% -10%, #fbe2e6 0%, transparent 55%),
+      radial-gradient(100% 60% at -10% 10%, #fff3ee 0%, transparent 50%),
+      var(--pinkSoft);
+    overflow-x:hidden;
+  }
+  body.custom-cursor{cursor:none}
+  body.custom-cursor button,body.custom-cursor a{cursor:none}
+  a{text-decoration:none;color:inherit}
+  button{font-family:inherit;cursor:pointer}
+ 
+  /* cookie cursor */
+  #cur{position:fixed;top:0;left:0;z-index:300;pointer-events:none;width:34px;height:34px;
+    transform:translate(-100px,-100px);transition:transform .08s ease-out,width .15s,height .15s;
+    filter:drop-shadow(0 2px 4px rgba(58,42,46,.4));will-change:transform;display:none}
+  body.custom-cursor #cur{display:block}
+  @media(hover:none),(pointer:coarse){#cur{display:none!important}body{cursor:auto}button,a{cursor:pointer}}
+ 
+  .eyebrow{display:inline-flex;align-items:center;gap:9px;font-weight:600;color:var(--greenDeep);
+    font-size:.82rem;letter-spacing:.04em;text-transform:uppercase}
+  .eyebrow.light{color:var(--cream)}
+  .pulse{width:9px;height:9px;border-radius:50%;background:var(--pinkHot);
+    box-shadow:0 0 0 0 rgba(224,69,123,.6);animation:pulse 1.8s infinite}
+  @keyframes pulse{70%{box-shadow:0 0 0 12px rgba(224,69,123,0)}100%{box-shadow:0 0 0 0 rgba(224,69,123,0)}}
+ 
+  /* nav */
+  nav{position:sticky;top:0;z-index:60;display:flex;align-items:center;justify-content:space-between;
+    padding:14px 28px;backdrop-filter:blur(12px);background:rgba(247,219,224,.72);
+    border-bottom:1px solid rgba(30,107,79,.12)}
+  .brand{display:flex;align-items:center;gap:11px;font-family:var(--serif);font-weight:900;font-size:1.3rem}
+  .brand b{color:var(--pinkHot)}.brand .g{color:var(--green)}
+  .links{display:flex;align-items:center;gap:6px}
+  .links a{font-weight:600;font-size:.95rem;padding:8px 15px;border-radius:30px;color:var(--greenDeep);transition:.2s}
+  .links a:hover{background:#fff;transform:translateY(-2px)}
+  .cta-link{background:var(--green);color:var(--cream)!important;box-shadow:0 4px 0 var(--greenDeep)}
+  @media(max-width:760px){.links a:not(.cta-link){display:none}}
+ 
+  /* hero */
+  .hero{position:relative;max-width:1240px;margin:0 auto;padding:26px 28px 54px}
+  .hero-bg{position:absolute;inset:0;max-height:640px;overflow:hidden;pointer-events:none}
+  .dot{position:absolute;width:7px;height:7px;border-radius:50%;background:rgba(30,107,79,.16);animation:floaty 6s ease-in-out infinite}
+  @keyframes floaty{50%{transform:translateY(-12px)}}
+  .hero-grid{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:46px;align-items:start}
+  @media(max-width:980px){.hero-grid{grid-template-columns:1fr;gap:30px}}
+  .hero-copy h1{font-family:var(--serif);font-weight:900;font-size:clamp(2.8rem,6.5vw,4.8rem);
+    line-height:.94;letter-spacing:-.02em;margin:14px 0 16px}
+  .hero-copy h1 em{color:var(--pinkHot);font-style:italic;position:relative}
+  .hero-copy p{max-width:430px;font-size:1.05rem;line-height:1.6;color:#5a4248}
+  .hero-actions{display:flex;gap:12px;margin:22px 0 20px;flex-wrap:wrap}
+  .btn{font-weight:600;border:none;border-radius:40px;padding:13px 26px;font-size:1rem;transition:.18s}
+  .btn.primary{background:var(--pinkHot);color:var(--cream);box-shadow:0 5px 0 #b0305f}
+  .btn.primary:hover{transform:translateY(-3px);box-shadow:0 8px 0 #b0305f}
+  .btn.ghost{background:var(--cream);color:var(--greenDeep);box-shadow:0 5px 0 rgba(30,107,79,.28)}
+  .btn.ghost:hover{transform:translateY(-3px)}
+  .ticker{margin-top:6px;overflow:hidden;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+  .ticker-row{display:flex;white-space:nowrap;animation:scrollx 26s linear infinite;
+    font-family:var(--serif);font-weight:800;color:var(--greenDeep);font-size:.92rem}
+  .ticker-row span{display:inline-flex;align-items:center;gap:18px;padding-right:18px}
+  .ticker-row i{color:var(--pinkHot);font-style:normal}
+  @keyframes scrollx{to{transform:translateX(-50%)}}
+ 
+  /* counter */
+  .counter{background:var(--cream);border-radius:30px;padding:22px;border:3px solid rgba(30,107,79,.14);
+    box-shadow:0 28px 64px rgba(58,42,46,.18)}
+  .counter-top{display:flex;justify-content:space-between;align-items:center;padding:2px 6px 14px}
+  .step-label{font-family:var(--script);font-size:1.5rem;color:var(--caramelDeep)}
+  .price-tag{font-family:var(--serif);font-weight:900;font-size:1.5rem;color:var(--pinkHot)}
+  .stage{position:relative;height:290px;display:flex;align-items:center;justify-content:center;
+    overflow:hidden;border-radius:22px;background:radial-gradient(circle at 50% 42%,#fff,#fbeef0 72%)}
+  .plate{position:relative;z-index:2;transition:transform .15s ease-out}
+  .plate.baking{animation:pop .6s ease}
+  @keyframes pop{0%{transform:scale(.86)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
+  .disc{position:absolute;left:50%;top:60%;width:270px;height:70px;transform:translate(-50%,-50%);
+    border-radius:50%;background:radial-gradient(ellipse at 50% 35%,#fff,#eadcd3 70%,#ddccc2);
+    box-shadow:0 18px 26px rgba(58,42,46,.16);z-index:1}
+  .steam{position:absolute;inset:0 0 auto 0;height:60%;pointer-events:none;opacity:0;transition:opacity .3s;z-index:3}
+  .steam.on{opacity:1}
+  .steam i{position:absolute;bottom:18%;width:10px;height:54px;border-radius:50%;
+    background:linear-gradient(transparent,rgba(255,255,255,.75));filter:blur(4px);animation:steam 1.4s ease-in infinite}
+  @keyframes steam{0%{transform:translateY(20px) scaleX(.6);opacity:0}40%{opacity:.8}100%{transform:translateY(-46px) scaleX(1.3);opacity:0}}
+  .hint{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);font-size:.74rem;color:#a98e8e;font-weight:500}
+ 
+  .pick{margin-top:10px}
+  .pick-row{margin-bottom:12px}
+  .pick-h{display:flex;align-items:center;gap:8px;font-weight:600;color:var(--greenDeep);
+    font-size:.84rem;margin-bottom:7px;text-transform:uppercase;letter-spacing:.04em}
+  .pick-h i{font-style:normal;color:var(--caramelDeep);background:#f6e7da;border-radius:20px;padding:1px 9px;font-size:.78rem}
+  .toks{display:flex;flex-wrap:wrap;gap:7px}
+  .tok{font-weight:500;font-size:.86rem;border:2px solid rgba(58,42,46,.14);background:#fff;color:var(--choc);
+    border-radius:30px;padding:7px 13px;transition:.16s;display:inline-flex;align-items:center;gap:7px}
+  .tok:hover{border-color:var(--pinkHot);transform:translateY(-2px)}
+  .tok.on{background:var(--green);color:var(--cream);border-color:var(--green)}
+  .tok-dot{width:11px;height:11px;border-radius:50%;border:1px solid rgba(0,0,0,.15)}
+  .actions{display:flex;gap:10px;margin-top:14px}
+  .btn.bake{flex:1;background:var(--caramel);color:#fff;box-shadow:0 5px 0 var(--caramelDeep)}
+  .btn.bake:hover{transform:translateY(-3px);box-shadow:0 8px 0 var(--caramelDeep)}
+  .btn.add{flex:1;background:var(--green);color:var(--cream);box-shadow:0 5px 0 var(--greenDeep)}
+  .btn.add:hover{transform:translateY(-3px);box-shadow:0 8px 0 var(--greenDeep)}
+ 
+  /* sections */
+  .sec-head{text-align:center;max-width:620px;margin:0 auto 38px}
+  .sec-head h2{font-family:var(--serif);font-weight:900;font-size:clamp(2rem,5vw,3.2rem);color:var(--greenDeep);margin:8px 0;line-height:1}
+  .sec-head .sub{color:#5a4248;font-size:1.04rem}
+  .reveal{opacity:0;transform:translateY(36px);transition:.7s}
+  .reveal.in{opacity:1;transform:none}
+ 
+  .menu{max-width:1240px;margin:0 auto;padding:74px 28px}
+  .menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  @media(max-width:900px){.menu-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:600px){.menu-grid{grid-template-columns:1fr}}
+  .card{background:var(--cream);border-radius:26px;overflow:hidden;border:3px solid transparent;
+    box-shadow:0 14px 40px rgba(58,42,46,.12);transition:transform .3s,box-shadow .3s,border-color .3s;display:flex;flex-direction:column}
+  .card:hover{transform:translateY(-10px);box-shadow:0 30px 60px rgba(58,42,46,.2);border-color:var(--pinkHot)}
+  .card-top{display:flex;justify-content:center;padding:24px 0 8px;background:radial-gradient(circle at 50% 30%,#fff,#fbeef0)}
+  .card-top svg{transition:transform .4s}
+  .card:hover .card-top svg{transform:rotate(8deg) scale(1.05)}
+  .card-body{padding:18px 20px 20px}
+  .card-tag{display:inline-block;font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;
+    color:var(--cream);background:var(--green);padding:4px 11px;border-radius:20px;margin-bottom:9px}
+  .card-tag.new{background:var(--pinkHot)}.card-tag.alt{background:var(--caramel)}
+  .card-body h3{font-family:var(--serif);font-weight:800;font-size:1.3rem;color:var(--greenDeep)}
+  .card-body p{color:#5a4248;font-size:.92rem;line-height:1.5;margin:6px 0 14px;min-height:54px}
+  .card-foot{display:flex;align-items:center;justify-content:space-between}
+  .card-foot b{font-family:var(--serif);font-weight:900;color:var(--pinkHot);font-size:1.2rem}
+  .load{font-size:.84rem;font-weight:600;color:var(--caramelDeep);opacity:0;transform:translateX(-6px);transition:.25s}
+  .card:hover .load{opacity:1;transform:none}
+ 
+  .market{max-width:1240px;margin:0 auto;padding:24px 28px 74px}
+  .stall{border-radius:34px;overflow:hidden;box-shadow:0 30px 70px rgba(22,82,60,.3)}
+  .awning{display:flex;height:44px}
+  .awning span{flex:1}.awning .r{background:var(--pinkHot)}.awning .w{background:var(--cream)}
+  .stall-body{background:var(--green);color:var(--cream);padding:44px 40px;display:grid;
+    grid-template-columns:1.1fr .9fr;gap:34px;align-items:center}
+  @media(max-width:860px){.stall-body{grid-template-columns:1fr}}
+  .stall-body h2{font-family:var(--serif);font-weight:900;font-size:clamp(1.8rem,4.5vw,2.7rem);line-height:1.02;margin:10px 0 12px;color:var(--cream)}
+  .stall-body p{opacity:.92;line-height:1.6;max-width:420px}
+  .stats{display:flex;gap:26px;margin-top:20px}
+  .stat b{font-family:var(--serif);font-weight:900;font-size:1.8rem;display:block;line-height:1;color:var(--pinkSoft)}
+  .stat small{opacity:.85}
+  .tray{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;justify-items:center;
+    background:rgba(255,248,240,.1);padding:16px;border-radius:22px}
+ 
+  .order{max-width:1100px;margin:0 auto;padding:24px 28px 84px}
+  .order-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:26px;align-items:start}
+  @media(max-width:820px){.order-grid{grid-template-columns:1fr}}
+  .ticket{background:var(--cream);border-radius:24px;padding:24px;box-shadow:0 20px 50px rgba(58,42,46,.15);
+    border:2px dashed rgba(30,107,79,.3)}
+  .ticket-top{display:flex;justify-content:space-between;font-family:var(--serif);font-weight:900;letter-spacing:.08em;
+    color:var(--green);border-bottom:2px dashed rgba(30,107,79,.25);padding-bottom:12px;margin-bottom:8px}
+  .empty{padding:28px 6px;text-align:center;color:#8a7274}
+  .tl{list-style:none}
+  .tl li{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid rgba(58,42,46,.08)}
+  .tl .tx{flex:1}.tl .tx b{font-family:var(--serif);font-weight:800;color:var(--greenDeep);display:block;font-size:1rem}
+  .tl .tx small{color:#8a7274;font-size:.82rem}
+  .tl .tp{font-family:var(--serif);font-weight:900;color:var(--pinkHot)}
+  .tl .tx-x{border:none;background:#f3e3e6;color:var(--pinkHot);width:26px;height:26px;border-radius:50%;font-size:1.1rem;line-height:1;transition:.15s}
+  .tl .tx-x:hover{background:var(--pinkHot);color:#fff;transform:rotate(90deg)}
+  .total{display:flex;justify-content:space-between;align-items:center;margin:14px 0;padding-top:12px;
+    border-top:2px dashed rgba(30,107,79,.25);font-family:var(--serif);font-size:1.2rem}
+  .total b{color:var(--pinkHot);font-weight:900;font-size:1.5rem}
+  .btn.wide{width:100%;display:block;text-align:center}
+  .note{text-align:center;font-size:.8rem;color:#a08688;margin-top:10px}
+  .aside{background:var(--green);color:var(--cream);border-radius:24px;padding:26px;box-shadow:0 20px 50px rgba(22,82,60,.25)}
+  .aside h4{font-family:var(--serif);font-weight:800;font-size:1.3rem;margin-bottom:14px}
+  .steps{list-style:none;display:flex;flex-direction:column;gap:12px}
+  .steps li{display:flex;gap:12px;align-items:flex-start;font-size:.94rem;line-height:1.4;opacity:.95}
+  .steps span{flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:var(--pinkHot);color:#fff;display:grid;place-items:center;font-weight:700;font-size:.85rem}
+  .aside-links{margin-top:20px;display:flex;flex-direction:column;gap:8px}
+  .aside-links a{font-weight:600;color:var(--pinkSoft);transition:.2s}
+  .aside-links a:hover{color:#fff;transform:translateX(4px)}
+ 
+  footer{background:var(--greenDeep);color:var(--cream);padding:52px 28px 40px;text-align:center}
+  .foot-in{max-width:560px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:14px}
+  footer .brand b{color:var(--pinkSoft)}footer .brand .g{color:var(--caramel)}
+  footer p{opacity:.9;line-height:1.6}footer small{opacity:.7}
+ 
+  .fab{position:fixed;right:20px;bottom:20px;z-index:70;background:var(--pinkHot);color:#fff;font-weight:700;
+    padding:14px 20px;border-radius:40px;box-shadow:0 10px 30px rgba(224,69,123,.5);transform:translateY(120px);transition:transform .4s}
+  .fab.show{transform:none}
+  .toast{position:fixed;left:50%;bottom:26px;z-index:80;background:var(--greenDeep);color:var(--cream);
+    padding:13px 22px;border-radius:40px;font-weight:600;box-shadow:0 12px 30px rgba(0,0,0,.25);
+    transform:translate(-50%,120px);transition:transform .4s;max-width:90vw}
+  .toast.show{transform:translate(-50%,0)}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="cur">
+  <svg viewBox="0 0 40 40" width="34" height="34">
+    <circle cx="20" cy="20" r="17" fill="#C8893F" stroke="#A86E2C" stroke-width="2"/>
+    <circle cx="14" cy="15" r="2.6" fill="#3A2A2E"/><circle cx="26" cy="13" r="2" fill="#3A2A2E"/>
+    <circle cx="24" cy="25" r="2.8" fill="#3A2A2E"/><circle cx="15" cy="26" r="1.8" fill="#3A2A2E"/>
+    <circle cx="29" cy="22" r="1.6" fill="#3A2A2E"/>
+  </svg>
+</div>
+ 
+<nav>
+  <div class="brand"><span id="navLogo"></span><span><b>EL-K</b> <span class="g">cookies</span></span></div>
+  <div class="links">
+    <a href="#build">Build</a><a href="#menu">Menu</a><a href="#market">Market</a>
+    <a href="#order" class="cta-link" id="navBox">Your box</a>
+  </div>
+</nav>
+ 
+<header class="hero" id="build">
+  <div class="hero-bg" id="dots"></div>
+  <div class="hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow"><span class="pulse"></span> Home-made · Wembley Park, every Saturday</span>
+      <h1>Build the<br><em>cookie</em> you<br>actually want.</h1>
+      <p>Pick your dough, press in your mix-ins, and watch it bake. Then drop it in your box — we&rsquo;ll have it warm at the market stall.</p>
+      <div class="hero-actions">
+        <a class="btn primary" href="#menu">See the menu</a>
+        <a class="btn ghost" href="#order" id="boxBtn2">Your box · £0.00</a>
+      </div>
+      <div class="ticker"><div class="ticker-row" id="ticker"></div></div>
+    </div>
+ 
+    <div class="counter">
+      <div class="counter-top"><span class="step-label">Your cookie</span><span class="price-tag" id="price">£3.50</span></div>
+      <div class="stage" id="stage">
+        <div class="steam" id="steam"></div>
+        <div class="plate" id="plate"><div id="cookie"></div></div>
+        <div class="disc"></div>
+        <div class="hint">move to tilt · then bake</div>
+      </div>
+      <div class="pick">
+        <div class="pick-row"><span class="pick-h">Dough</span><div class="toks" id="doughToks"></div></div>
+        <div class="pick-row"><span class="pick-h">Mix-ins <i id="mixCount">2/4</i></span><div class="toks" id="mixToks"></div></div>
+        <div class="actions">
+          <button class="btn bake" id="bakeBtn">Bake it 🔥</button>
+          <button class="btn add" id="addBtn">Add to box →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+ 
+<section class="menu reveal" id="menu">
+  <div class="sec-head">
+    <span class="eyebrow"><span class="pulse"></span> Fresh from the oven</span>
+    <h2>This week&rsquo;s bakes</h2>
+    <p class="sub">Nine ever-changing flavours. Tap one to load it into the counter and make it yours.</p>
+  </div>
+  <div class="menu-grid" id="menuGrid"></div>
+</section>
+ 
+<section class="market reveal" id="market">
+  <div class="stall">
+    <div class="awning" id="awning"></div>
+    <div class="stall-body">
+      <div>
+        <span class="eyebrow light"><span class="pulse"></span> Find the stall</span>
+        <h2>Saturdays at<br>Wembley Park Market</h2>
+        <p>We bake through the morning so there&rsquo;s always something warm. Come say hi, or message ahead and we&rsquo;ll set your box aside.</p>
+        <div class="stats">
+          <div class="stat"><b>100%</b><small>home-made</small></div>
+          <div class="stat"><b>Sat</b><small>9am–3pm</small></div>
+          <div class="stat"><b>9+</b><small>flavours</small></div>
+        </div>
+      </div>
+      <div class="tray" id="tray"></div>
+    </div>
+  </div>
+</section>
+ 
+<section class="order reveal" id="order">
+  <div class="sec-head"><span class="eyebrow"><span class="pulse"></span> Your box</span><h2>Ready when you are</h2></div>
+  <div class="order-grid">
+    <div class="ticket">
+      <div class="ticket-top"><span>EL-K COOKIES</span><span>ORDER</span></div>
+      <div id="ticketBody"></div>
+      <div class="total"><span>Total</span><b id="total">£0.00</b></div>
+      <a class="btn primary wide" href="https://www.instagram.com/eli_kcookies/" target="_blank" rel="noopener">Send box on Instagram</a>
+      <p class="note">We confirm everything by DM — no payment taken here.</p>
+    </div>
+    <aside class="aside">
+      <h4>How it works</h4>
+      <ol class="steps">
+        <li><span>1</span> Build cookies or load menu favourites into your box.</li>
+        <li><span>2</span> Send the box to us on Instagram or TikTok.</li>
+        <li><span>3</span> We reply to confirm flavours, count and pickup.</li>
+        <li><span>4</span> Collect warm at Wembley Park Market on Saturday.</li>
+      </ol>
+      <div class="aside-links">
+        <a href="https://www.instagram.com/eli_kcookies/" target="_blank" rel="noopener">Instagram @eli_kcookies</a>
+        <a href="https://www.tiktok.com/@elik.cookies" target="_blank" rel="noopener">TikTok @elik.cookies</a>
+      </div>
+    </aside>
+  </div>
+</section>
+ 
+<footer>
+  <div class="foot-in">
+    <div class="brand" style="font-size:1.6rem"><span id="footLogo"></span><span><b>EL-K</b> <span class="g">cookies</span></span></div>
+    <p>Home-made cookies, baked with love. Dreaming, baking, creating — one happy cookie at a time.</p>
+    <small>© 2026 EL-K Cookies · Wembley Park Market</small>
+  </div>
+</footer>
+ 
+<a href="#order" class="fab" id="fab">🛍 0</a>
+<div class="toast" id="toast"></div>
+ 
+<script>
+(function(){
+  "use strict";
+  var DOUGHS=[
+    {id:"classic",name:"Brown butter",dough:"#D98C3A",edge:"#B26F26"},
+    {id:"pink",name:"Pink velvet",dough:"#EBA6B2",edge:"#D77E8E"},
+    {id:"matcha",name:"Matcha",dough:"#A8C56F",edge:"#86A24C"},
+    {id:"choc",name:"Double choc",dough:"#5A3A24",edge:"#3F2716"}
+  ];
+  var MIXINS=[
+    {id:"darkchoc",name:"Dark choc",color:"#2a160c",emoji:"🍫"},
+    {id:"white",name:"White choc",color:"#fff4e8",emoji:"🤍"},
+    {id:"caramel",name:"Salted caramel",color:"#C8893F",emoji:"🧈"},
+    {id:"oreo",name:"Cookies & cream",color:"#161616",emoji:"🖤"},
+    {id:"pist",name:"Pistachio",color:"#7fae4b",emoji:"💚"},
+    {id:"berry",name:"Berry",color:"#E0457B",emoji:"🍓"}
+  ];
+  var SIGS=[
+    {id:1,name:"The Classic",kind:"best seller",dough:"classic",mixins:["darkchoc"],price:3.5,desc:"Brown-butter dough, gooey middle, loaded with dark chocolate."},
+    {id:2,name:"Pink Velvet",kind:"new",dough:"pink",mixins:["white","berry"],price:4.1,desc:"Soft pink dough, white chocolate and freeze-dried berries."},
+    {id:3,name:"Matcha Crookie",kind:"cult fave",dough:"matcha",mixins:["white","pist"],price:4.5,desc:"Croissant-cookie hybrid with matcha and pistachio."},
+    {id:4,name:"Double Choc",kind:"rich",dough:"choc",mixins:["darkchoc","white"],price:3.9,desc:"Deep cocoa dough packed with two kinds of chocolate."},
+    {id:5,name:"Cookies & Cream",kind:"crunchy",dough:"classic",mixins:["oreo","white"],price:3.9,desc:"Buttery dough folded through crushed sandwich cookies."},
+    {id:6,name:"Salted Caramel",kind:"gooey",dough:"classic",mixins:["caramel","darkchoc"],price:4.2,desc:"Molten salted-caramel core with a hit of sea salt."},
+    {id:7,name:"Pistachio Dream",kind:"limited",dough:"matcha",mixins:["pist","white"],price:4.6,desc:"Nutty pistachio dough with white chocolate pools."},
+    {id:8,name:"Berry Velvet",kind:"seasonal",dough:"pink",mixins:["berry","darkchoc"],price:4.2,desc:"Pink dough, tart berries and dark chocolate shards."},
+    {id:9,name:"Triple Threat",kind:"for sharing",dough:"choc",mixins:["darkchoc","white","caramel"],price:4.8,desc:"Choc dough, dark + white chocolate and caramel. Go big."}
+  ];
+ 
+  function $(s){return document.querySelector(s);}
+  function el(tag,cls,html){var e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;}
+  function clamp(v){return Math.max(0,Math.min(255,v));}
+  function hx(h){return [parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];}
+  function toHex(a){return "#"+a.map(function(v){return clamp(Math.round(v)).toString(16).padStart(2,"0");}).join("");}
+  function mix(c1,c2,t){var a=hx(c1),b=hx(c2);return toHex([a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t]);}
+  function seeded(s){s=s%2147483647;if(s<=0)s+=2147483646;return function(){return (s=(s*16807)%2147483647)/2147483647;};}
+ 
+  function cookieSVG(doughId,mixins,bake,size,wobble){
+    bake=bake==null?1:bake; size=size||220; wobble=wobble||0;
+    var d=DOUGHS.filter(function(x){return x.id===doughId;})[0]||DOUGHS[0];
+    var raw="#E9C39A";
+    var base=mix(raw,d.dough,bake);
+    var edge=mix(raw,d.edge,Math.min(1,bake*1.2));
+    var light=mix(base,"#FFFFFF",0.22);
+    var speck=mix(base,"#000000",0.18);
+    var gid="g"+doughId+Math.round(bake*100)+size+Math.round(wobble*10)+mixins.join("");
+    var pal=mixins.length?mixins:["darkchoc"];
+    var rnd=seeded(mixins.join("").length*97+mixins.length*31+7);
+    var chips="";
+    for(var i=0;i<26;i++){
+      var ang=rnd()*6.283, rad=Math.sqrt(rnd())*70;
+      var mxo=MIXINS.filter(function(m){return m.id===pal[i%pal.length];})[0];
+      var c=mxo?mxo.color:"#2a160c";
+      var r=5+rnd()*7;
+      var cx=110+Math.cos(ang)*rad, cy=110+Math.sin(ang)*rad, rot=rnd()*60-30;
+      var op=bake>0.15?1:0;
+      chips+='<g transform="translate('+cx.toFixed(1)+' '+cy.toFixed(1)+') rotate('+rot.toFixed(0)+')" opacity="'+op+'">'
+        +'<ellipse rx="'+r.toFixed(1)+'" ry="'+(r*0.8).toFixed(1)+'" fill="'+c+'"/>'
+        +'<ellipse rx="'+(r*0.5).toFixed(1)+'" ry="'+(r*0.4).toFixed(1)+'" cx="'+(-r*0.25).toFixed(1)+'" cy="'+(-r*0.25).toFixed(1)+'" fill="#fff" opacity="0.25"/></g>';
+    }
+    var spk="";
+    for(var j=0;j<36;j++){var rr=seeded(j*13+1);var a2=rr()*6.28,d2=Math.sqrt(rr())*82;
+      spk+='<circle cx="'+(110+Math.cos(a2)*d2).toFixed(1)+'" cy="'+(110+Math.sin(a2)*d2).toFixed(1)+'" r="'+(0.8+rr()*1.2).toFixed(1)+'" fill="'+speck+'" opacity="0.35"/>';}
+    return '<svg viewBox="0 0 220 220" width="'+size+'" height="'+size+'" style="display:block;filter:drop-shadow(0 16px 20px rgba(58,42,46,.28));transform:rotate('+wobble+'deg)">'
+      +'<defs><radialGradient id="'+gid+'" cx="42%" cy="38%" r="62%">'
+      +'<stop offset="0%" stop-color="'+light+'"/><stop offset="70%" stop-color="'+base+'"/><stop offset="100%" stop-color="'+edge+'"/></radialGradient></defs>'
+      +'<path d="M110 18 C150 16 188 40 198 82 C208 124 192 174 150 196 C112 214 60 206 32 170 C8 138 10 86 36 52 C58 24 84 20 110 18 Z" fill="url(#'+gid+')" stroke="'+edge+'" stroke-width="2"/>'
+      +spk+chips
+      +'<ellipse cx="84" cy="74" rx="42" ry="26" fill="#fff" opacity="'+(0.10+bake*0.06).toFixed(2)+'" transform="rotate(-18 84 74)"/></svg>';
+  }
+ 
+  function logoSVG(size){
+    return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 100 100">'
+      +'<path d="M50 8 C70 6 88 20 90 42 C92 64 80 88 56 92 C32 96 12 82 9 58 C6 34 24 10 50 8 Z" fill="#F4C9CE" stroke="#1E6B4F" stroke-width="5" stroke-linejoin="round"/>'
+      +'<path d="M58 30 C42 26 30 40 33 54 C35 65 47 70 55 64 C61 60 60 50 52 49 C46 48 44 54 48 57" fill="none" stroke="#C8893F" stroke-width="5.5" stroke-linecap="round"/>'
+      +'<circle cx="68" cy="34" r="6" fill="#A86E2C"/><circle cx="64" cy="52" r="3" fill="#A86E2C"/></svg>';
+  }
+ 
+  /* ---- state ---- */
+  var dough="classic", mixins=["darkchoc","caramel"], order=[], bake=1, baking=false;
+ 
+  function priceEach(){return 3.5+mixins.length*0.3;}
+  function boxTotal(){return order.reduce(function(s,o){return s+3.5+o.mixins.length*0.3;},0);}
+ 
+  function renderCookie(){
+    $("#cookie").innerHTML=cookieSVG(dough,mixins,bake,250,0);
+    $("#price").textContent="£"+priceEach().toFixed(2);
+    $("#mixCount").textContent=mixins.length+"/4";
+  }
+  function renderToks(){
+    var dt=$("#doughToks"); dt.innerHTML="";
+    DOUGHS.forEach(function(d){
+      var b=el("button","tok"+(dough===d.id?" on":""));
+      b.innerHTML='<span class="tok-dot" style="background:'+d.dough+'"></span>'+d.name;
+      b.onclick=function(){dough=d.id;renderToks();renderCookie();};
+      dt.appendChild(b);
+    });
+    var mt=$("#mixToks"); mt.innerHTML="";
+    MIXINS.forEach(function(m){
+      var on=mixins.indexOf(m.id)>=0;
+      var b=el("button","tok"+(on?" on":""));
+      b.innerHTML='<span class="tok-dot" style="background:'+m.color+'"></span>'+m.emoji+" "+m.name;
+      b.onclick=function(){
+        var i=mixins.indexOf(m.id);
+        if(i>=0)mixins.splice(i,1); else if(mixins.length<4)mixins.push(m.id);
+        renderToks();renderCookie();
+      };
+      mt.appendChild(b);
+    });
+  }
+  function runBake(){
+    if(baking)return; baking=true; bake=0;
+    $("#bakeBtn").textContent="Baking…";
+    $("#steam").classList.add("on");
+    $("#plate").classList.add("baking");
+    var t0=performance.now(), dur=1300;
+    function step(t){
+      var p=Math.min(1,(t-t0)/dur); bake=p; renderCookie();
+      if(p<1)requestAnimationFrame(step);
+      else{baking=false;$("#bakeBtn").textContent="Bake it 🔥";setTimeout(function(){$("#steam").classList.remove("on");$("#plate").classList.remove("baking");},400);}
+    }
+    requestAnimationFrame(step);
+  }
+  function addToOrder(){
+    var d=DOUGHS.filter(function(x){return x.id===dough;})[0];
+    var names=mixins.map(function(id){var m=MIXINS.filter(function(x){return x.id===id;})[0];return m?m.name:null;}).filter(Boolean);
+    order.push({id:Date.now(),dough:dough,mixins:mixins.slice(),label:d.name,mix:names});
+    renderOrder(); toast(d.name+" cookie added to your box");
+  }
+  function renderOrder(){
+    var body=$("#ticketBody"); body.innerHTML="";
+    if(order.length===0){ body.appendChild(el("div","empty","Your box is empty. Build a cookie or tap one from the menu to start.")); }
+    else{
+      var ul=el("ul","tl");
+      order.forEach(function(o){
+        var li=el("li");
+        li.innerHTML='<span>'+cookieSVG(o.dough,o.mixins,1,48,0)+'</span>'
+          +'<span class="tx"><b>'+o.label+'</b><small>'+(o.mix.length?o.mix.join(" · "):"plain")+'</small></span>'
+          +'<span class="tp">£'+(3.5+o.mixins.length*0.3).toFixed(2)+'</span>';
+        var x=el("button","tx-x","×"); x.onclick=function(){order=order.filter(function(z){return z.id!==o.id;});renderOrder();};
+        li.appendChild(x); ul.appendChild(li);
+      });
+      body.appendChild(ul);
+    }
+    $("#total").textContent="£"+boxTotal().toFixed(2);
+    $("#boxBtn2").textContent="Your box · £"+boxTotal().toFixed(2);
+    $("#navBox").textContent=order.length?("Your box · "+order.length):"Your box";
+    var fab=$("#fab"); fab.textContent="🛍 "+order.length; fab.classList.toggle("show",order.length>0);
+  }
+ 
+  /* ---- menu ---- */
+  function renderMenu(){
+    var g=$("#menuGrid");
+    SIGS.forEach(function(s){
+      var card=el("article","card");
+      var tagClass=(s.kind==="new")?"new":((s.kind==="limited"||s.kind==="seasonal")?"alt":"");
+      card.innerHTML='<div class="card-top">'+cookieSVG(s.dough,s.mixins,1,140,(s.id%3-1)*4)+'</div>'
+        +'<div class="card-body"><span class="card-tag '+tagClass+'">'+s.kind+'</span>'
+        +'<h3>'+s.name+'</h3><p>'+s.desc+'</p>'
+        +'<div class="card-foot"><b>£'+s.price.toFixed(2)+'</b><span class="load">Load &amp; bake →</span></div></div>';
+      card.onclick=function(){dough=s.dough;mixins=s.mixins.slice();renderToks();renderCookie();runBake();
+        document.getElementById("build").scrollIntoView({behavior:"smooth"});};
+      g.appendChild(card);
+    });
+  }
+  function renderTray(){
+    var t=$("#tray");
+    SIGS.slice(0,6).forEach(function(s,i){
+      var w=el("div"); w.innerHTML=cookieSVG(s.dough,s.mixins,1,90,(i%2?1:-1)*6); t.appendChild(w);
+    });
+  }
+ 
+  /* ---- decorations ---- */
+  function buildDots(){
+    var d=$("#dots");
+    for(var i=0;i<20;i++){var s=el("span","dot");
+      s.style.left=((i*53)%100)+"%"; s.style.top=((i*37)%100)+"%"; s.style.animationDelay=(i*0.2)+"s";
+      d.appendChild(s);}
+  }
+  function buildTicker(){
+    var words=["FRESHLY BAKED","SMALL BATCH","MADE BY HAND","CROOKIES & BROOKIES","WEMBLEY PARK","DM TO ORDER"];
+    var all=words.concat(words);
+    var row=$("#ticker");
+    all.forEach(function(w){var s=el("span",null,w+'<i>✷</i>');row.appendChild(s);});
+  }
+  function buildAwning(){var a=$("#awning");for(var i=0;i<14;i++){a.appendChild(el("span",i%2?"r":"w"));}}
+ 
+  /* ---- tilt + cursor ---- */
+  function initTilt(){
+    var stage=$("#stage"), plate=$("#plate");
+    stage.addEventListener("mousemove",function(e){
+      var r=stage.getBoundingClientRect();
+      var px=(e.clientX-r.left)/r.width-0.5, py=(e.clientY-r.top)/r.height-0.5;
+      plate.style.transform="rotate("+(px*7).toFixed(2)+"deg) translateY("+(py*8).toFixed(2)+"px)";
+    });
+    stage.addEventListener("mouseleave",function(){plate.style.transform="";});
+    var steam=$("#steam");
+    for(var i=0;i<5;i++){var b=el("i");b.style.left=(20+i*15)+"%";b.style.animationDelay=(i*0.3)+"s";steam.appendChild(b);}
+  }
+  function initCursor(){
+    var cur=$("#cur");
+    var coarse=window.matchMedia&&window.matchMedia("(pointer:coarse)").matches;
+    if(coarse){return;}
+    // only switch to the custom cookie cursor once we know the pointer is moving
+    document.addEventListener("mousemove",function(e){
+      if(!document.body.classList.contains("custom-cursor")){document.body.classList.add("custom-cursor");}
+      cur.style.transform="translate("+(e.clientX-17)+"px,"+(e.clientY-17)+"px)";
+    });
+    document.addEventListener("mouseover",function(e){
+      var big=e.target.closest("button,a,.tok,.card");
+      cur.style.width=big?"50px":"34px"; cur.style.height=big?"50px":"34px";
+    });
+  }
+  function initReveal(){
+    var els=document.querySelectorAll(".reveal");
+    if(!("IntersectionObserver" in window)){els.forEach(function(x){x.classList.add("in");});return;}
+    var io=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting)e.target.classList.add("in");});},{threshold:0.14});
+    els.forEach(function(x){io.observe(x);});
+  }
+  var toastT;
+  function toast(msg){var t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove("show");},2200);}
+ 
+  /* ---- boot ---- */
+  function boot(){
+    $("#navLogo").innerHTML=logoSVG(38);
+    $("#footLogo").innerHTML=logoSVG(46);
+    buildDots(); buildTicker(); buildAwning();
+    renderToks(); renderCookie(); renderMenu(); renderTray(); renderOrder();
+    initTilt(); initCursor(); initReveal();
+    $("#bakeBtn").onclick=runBake; $("#addBtn").onclick=addToOrder;
+  }
+  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",boot);}
+  else{boot();}
+})();
+</script>
+</body>
+</html>
